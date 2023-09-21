@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\.shared\Space.Application\Space.Application.csproj" />
+    <ProjectReference Include="..\Space.UserAPI.Data\Space.UserAPI.Data.csproj" />
+    <ProjectReference Include="..\Space.UserAPI.Models\Space.UserAPI.Models.csproj" />
+  </ItemGroup>
+
+</Project>

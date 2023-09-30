@@ -27,6 +27,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddSession();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPriceHistoryService, PriceHistoryService>();
 
 var app = builder.Build();

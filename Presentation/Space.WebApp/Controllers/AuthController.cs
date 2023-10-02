@@ -1,28 +1,25 @@
 ﻿using Space.WebApp.Models;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Space.WebApp.Models.Request;
 using Space.WebApp.Service.Interfaces;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using System.Security.Claims;
-using Space.WebApp.Models.Response;
-using Microsoft.Extensions.Primitives;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Space.WebApp.Controllers
 {
     public class AuthController : BaseController
     {
         private readonly IAuthService _authService;
+        private readonly IUserService _userService;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, IUserService userService)
         {
             _authService = authService;
+            _userService = userService;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequest request)
@@ -45,6 +42,20 @@ namespace Space.WebApp.Controllers
         {
             RemoveCookie(Constant.CookieKey);
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult Register() => View();
+
+        [HttpPost("Auth/Register")]
+        public async Task<IActionResult> Register(UserRegisterRequest request)
+        {
+            var serviceResponse = await _userService.Register(request);
+
+            if (!serviceResponse.IsSuccess)
+                return BadRequest();
 
             return RedirectToAction("Index");
         }

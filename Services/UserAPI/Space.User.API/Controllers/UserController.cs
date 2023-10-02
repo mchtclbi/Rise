@@ -14,7 +14,7 @@ namespace Space.User.API.Controllers
         }
 
         [HttpPost("api/user")]
-        public IActionResult AddUser([FromBody] AddUserRequest request) => Created("", _userService.Add(request));
+        public async Task<IActionResult> AddUser([FromBody] AddUserRequest request) => Created("", await _userService.Add(request));
 
         [HttpPost("api/user/confirm")]
         public async Task<IActionResult> UserConfirm([FromBody] UserConfirmRequest request) => Ok(await _userService.UserConfirm(request));

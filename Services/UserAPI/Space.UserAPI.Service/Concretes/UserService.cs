@@ -29,7 +29,7 @@ namespace Space.UserAPI.Service.Concretes
                     Name = request.Name,
                     Surname = request.Surname,
                     EMail = request.EMail,
-                    Password = request.Password,
+                    Password = Encrypt.MD5(request.Password),
                     CreatedDate = DateTime.Now,
                     IsActive = true
                 });

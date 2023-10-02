@@ -12,46 +12,53 @@
     <script>
         const url = "/home/getpricehistory?dateRange=1";
 
-        $.ajax({
-            url: url,
-            type: "GET",
-            cache: false,
-            success: (response) => {
-                if (!response.isSuccess) {
-                    alert(response.message);
-                    return false;
+        const fillChart = (data) => {
+            const ctx = document.getElementById('myChart');
+
+            let values = [];
+            data.forEach((item) => { values.push(item.price); })
+
+            let dates = [];
+            data.forEach((item) => { dates.push(item.date); })
+
+            const chartData = {
+                labels: dates,
+                datasets: [{
+                    label: 'BTC TO USD',
+                    data: values,
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            };
+
+            new Chart(ctx, {
+                type: 'line',
+                data: chartData,
+            });
+        }
+
+        setInterval(() => {
+            $.ajax({
+                url: url,
+                type: "GET",
+                cache: false,
+                success: (response) => {
+                    if (!response.isSuccess) {
+                        alert(response.message);
+                        return false;
+                    }
+
+                    fillChart(response.data);
+                },
+                error: function (error) {
+                    if (error.status == 401) {
+                        document.location.reload();
+                    }
+                    alert("please try again later");
                 }
+            });
+        }, 35000);
 
-                const ctx = document.getElementById('myChart');
-
-                let values = [];
-                response.data.forEach((item) => { values.push(item.price); })
-
-                let dates = [];
-                response.data.forEach((item) => { dates.push(item.date); })
-
-                const data = {
-                    labels: dates,
-                    datasets: [{
-                        label: 'BTC TO USD',
-                        data: values,
-                        fill: false,
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1
-                    }]
-                };
-
-                new Chart(ctx, {
-                    type: 'line',
-                    data: data,
-                });
-            },
-            error: function (error) {
-                if (error.status == 401) {
-                    document.location.reload();
-                }
-                alert("please try again later");
-            }
-        });
     </script>
 }
